@@ -211,7 +211,7 @@
 
             <Button
                 style="@style/ButtonStyle"
-                android:id="@+id/button11"
+                android:id="@+id/saveDevice"
                 android:layout_width="245dp"
                 android:layout_height="match_parent"
                 android:text="Button"/>

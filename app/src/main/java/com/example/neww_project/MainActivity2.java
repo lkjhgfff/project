@@ -6,22 +6,72 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity {
 
     ImageButton simpleButton1, simpleButton2, simpleButton3;
+    Button add_button, save_button;
+
+    private ListView notesList;
+
+    private ArrayList<String> notes;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onResume() {
         super.onResume();
-        FullScreencall();
+        //FullScreencall();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        LinearLayout add_note = findViewById(R.id.add_note);
+        notesList = findViewById(R.id.notes_list);
+        notes = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes);
+        notesList.setAdapter(adapter);
+
+
+
+        add_button = (Button)findViewById(R.id.button);//get id of button 1
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                add_note.setVisibility(View.VISIBLE);
+            }
+        });
+
+        save_button = (Button)findViewById(R.id.buttonadd);//g
+        EditText noteInput = findViewById(R.id.note_input);// et id of button 1
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                add_note.setVisibility(View.INVISIBLE);
+                String note = noteInput.getText().toString();
+                if (!note.isEmpty()) {
+                    notes.add(note);
+                    adapter.notifyDataSetChanged();
+                    noteInput.setText("");
+                }
+            }
+        });
+
+
+
+
 
         simpleButton1 = (ImageButton) findViewById(R.id.button1);//get id of button 1
         simpleButton2 = (ImageButton) findViewById(R.id.button3);//get id of button 1

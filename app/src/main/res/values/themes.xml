@@ -16,4 +16,22 @@
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:background">@drawable/custom_button</item>
     </style>
+
+    <style name="ImageButtonText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="ImageButtonContainer">
+        <item name="android:background">@drawable/customborderblue</item>
+    </style>
+
+    <style name="Text">
+        <item name="android:textColor">@color/dark_blue</item>
+    </style>
+
+
 </resources>

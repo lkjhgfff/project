@@ -2,26 +2,68 @@ package com.example.neww_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity3 extends AppCompatActivity {
 
     ImageButton simpleButton1, simpleButton2, simpleButton3;
+    Button saveButton;
+    CalendarView calendar;
+    EditText time;
+    TextInputEditText recomendation;
+    String nowRecomendation = "",nowTime = "", dateq, monthq, yearq;
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        FullScreencall();
+        //FullScreencall();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+
+
+
+        calendar = findViewById(R.id.simpleCalendarView);
+        saveButton = (Button) findViewById(R.id.saveButton);
+        SharedPreferences prefs = this.getSharedPreferences("com.example.neww_project", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        time = findViewById(R.id.time);
+        recomendation = findViewById(R.id.recomendation);
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                nowRecomendation = dayOfMonth + "/" + (month) + "/" + year + "/recomendation";
+                nowTime = dayOfMonth + "/" + (month) + "/" + year + "/time";
+                time.setText(prefs.getString(nowTime, ""));
+                recomendation.setText(prefs.getString(nowRecomendation, ""));
+            }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editor.putString(nowRecomendation, recomendation.getText().toString());
+                editor.putString(nowTime, time.getText().toString());
+                editor.commit();
+            }
+        });
+
 
         simpleButton1 = (ImageButton) findViewById(R.id.button1);//get id of button 1
         simpleButton2 = (ImageButton) findViewById(R.id.button2);//get id of button 1

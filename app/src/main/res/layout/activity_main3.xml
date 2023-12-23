@@ -22,45 +22,41 @@
             android:layout_height="wrap_content"
             android:text="Ежедневник"
             android:textSize="26dp"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.754"
+        app:layout_constraintWidth_percent="0.8"
         app:layout_constraintBottom_toTopOf="@+id/navigation">
         <FrameLayout
             android:id="@+id/calendarFrame"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="310dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="95dp"
             android:background="@drawable/custom_border_light">
 
             <CalendarView
                 android:id="@+id/simpleCalendarView"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                app:layout_constraintHeight_percent="0.4"
-                />
+                android:layout_height="fill_parent"/>
         </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/time"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:id="@+id/timeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            app:layout_constraintWidth_percent="0.8"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarFrame">
@@ -73,36 +69,35 @@
                 android:textSize="26dp"/>
 
             <EditText
-                android:id="@+id/plain_text_input"
+                android:id="@+id/time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:gravity="bottom"/>
+                android:gravity="bottom" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Рекомендации врача"
             android:textSize="26dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.8"
             app:layout_constraintTop_toBottomOf="@+id/time"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textView4"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintHeight_percent="0.1"
             app:layout_constraintTop_toBottomOf="@+id/textView3">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/recomendation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/custom_border_light"/>
@@ -110,13 +105,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/saveButton"
             style="@style/ButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Сохранить"
+            android:layout_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.6"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"></Button>
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="100dp"></Button>
 
     </LinearLayout>
 
