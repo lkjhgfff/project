@@ -58,6 +58,7 @@ public class MainActivity3 extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Сохранено", Toast.LENGTH_LONG).show();
                 editor.putString(nowRecomendation, recomendation.getText().toString());
                 editor.putString(nowTime, time.getText().toString());
                 editor.commit();
@@ -78,7 +79,7 @@ public class MainActivity3 extends AppCompatActivity {
         simpleButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity3.this, MainActivity2.class));
+                startActivity(new Intent(MainActivity3.this, NoteClass.class));
             }
         });
         simpleButton3.setOnClickListener(new View.OnClickListener() {

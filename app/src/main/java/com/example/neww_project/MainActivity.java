@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
         var3 = findViewById(R.id.var3);
 
 
-        if (prefs.getInt("Year", 0) == 0) {
+        if (prefs.getInt("Year", 0) == 0 && prefs.getInt("key", 0) != 0)   {
+            Toast.makeText(this, "Выберите дату начала лечения", Toast.LENGTH_LONG).show();
             dpd = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int yearq, int monthq, int dayOfMonth) {
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, day, month, year);
             dpd.show();
+
     }
 
         handler.postDelayed( runnable = new Runnable() {
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         simpleButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MainActivity2.class));
+                startActivity(new Intent(MainActivity.this, NoteClass.class));
             }
         });
         simpleButton2.setOnClickListener(new View.OnClickListener() {
