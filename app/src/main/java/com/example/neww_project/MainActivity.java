@@ -2,7 +2,9 @@ package com.example.neww_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.time.LocalDate;
@@ -40,14 +43,19 @@ public class MainActivity extends AppCompatActivity {
     TextView date, nyears, nmonths, ndays;
     Calendar c;
     DatePickerDialog dpd;
+    PendingIntent pendingIntent;
+
     RadioButton rb1, rb2, rb3, rb4;
     LinearLayout var1, var2, var3, var4, choiceLayout;
+    TimePicker time_picker1, time_picker2;
     int year = 0, month = 0, day = 0, hour = 0, minute = 0, nowYear = 0, nowMonth = 0, nowDay = 0, nowHour = 0, nowMinute = 0;
     int pickYear = 2000, pickMonth = 0, pickDay = 20000, years = 0, months = 0, days = 0;
 
     Handler handler = new Handler();
     Runnable runnable;
     int delay = 500;
+    int stage = 0;
+
     @Override
     protected void onResume() {
 
@@ -74,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = this.getSharedPreferences("com.example.neww_project", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
+
         //Choice device
         if ((prefs.getInt("key", 0) != 1) && (prefs.getInt("key", 0) != 2) && (prefs.getInt("key", 0) != 3) && (prefs.getInt("key", 0) != 4)) {
             startActivity(new Intent(MainActivity.this, Choice.class));
@@ -99,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         var2 = findViewById(R.id.var2);
         var3 = findViewById(R.id.var3);
 
+        time_picker1 = findViewById(R.id.timePicker1);
+        time_picker2 = findViewById(R.id.timePicker2);
 
         if (prefs.getInt("Year", 0) == 0 && prefs.getInt("key", 0) != 0)   {
             Toast.makeText(this, "Выберите дату начала лечения", Toast.LENGTH_LONG).show();
@@ -110,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
                     editor.putInt("Month", monthq);
                     editor.putInt("Day", dayOfMonth);
                     editor.commit();
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(getIntent());
+                    overridePendingTransition(0, 0);
+
                 }
             }, day, month, year);
             dpd.show();
@@ -143,7 +159,11 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent alarmIntent = new Intent(MainActivity.this, MyAlarmReceiver.class);
+                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE);
+                start(time_picker2.getHour(), time_picker2.getMinute());
                 choiceLayout.setVisibility(View.INVISIBLE);
+
             }
         });
 
@@ -219,18 +239,21 @@ public class MainActivity extends AppCompatActivity {
                 var1.setVisibility(View.VISIBLE);
                 var2.setVisibility(View.INVISIBLE);
                 var3.setVisibility(View.INVISIBLE);
+                stage = 1;
         }
         if(v.getId() == R.id.radio_b2) {
             if(rb2.isChecked())
                 var1.setVisibility(View.VISIBLE);
                 var2.setVisibility(View.INVISIBLE);
                 var3.setVisibility(View.INVISIBLE);
+                stage = 1;
         }
         if(v.getId() == R.id.radio_b3) {
             if(rb3.isChecked())
                 var1.setVisibility(View.INVISIBLE);
                 var2.setVisibility(View.VISIBLE);
                 var3.setVisibility(View.INVISIBLE);
+                stage = 2;
         }
 
         if(v.getId() == R.id.radio_b4) {
@@ -238,8 +261,23 @@ public class MainActivity extends AppCompatActivity {
                 var1.setVisibility(View.INVISIBLE);
                 var2.setVisibility(View.INVISIBLE);
                 var3.setVisibility(View.VISIBLE);
+                stage = 3;
         }
 
+    }
+    public void start(int hour, int minute) {
+        android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(android.icu.util.Calendar.HOUR_OF_DAY, hour);
+        calendar.set(android.icu.util.Calendar.MINUTE, minute);
+        calendar.set(android.icu.util.Calendar.SECOND, 0);
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int interval = 0;
+
+
+
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pendingIntent);
     }
 }
 

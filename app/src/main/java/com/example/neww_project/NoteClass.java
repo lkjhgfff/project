@@ -5,26 +5,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class NoteClass extends AppCompatActivity {
 
     ImageButton simpleButton1, simpleButton2, simpleButton3;
-    Button save, openNoteAdd;
+    Button save, openNoteAdd, addPhoto;
     EditText namePut;
     TextInputEditText discPut;
     LinearLayout addNote;
+    ImageView choiceImage;
 
 
     @Override
@@ -43,12 +51,21 @@ public class NoteClass extends AppCompatActivity {
         namePut = findViewById(R.id.note_input);
         discPut = findViewById(R.id.note_input2);
 
+
         openNoteAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addNote.setVisibility(View.VISIBLE);
             }
         });
+        //addPhoto.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view)
+        //    {
+        //        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        //    }
+        //});
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

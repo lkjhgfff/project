@@ -22,6 +22,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageButton;
@@ -36,16 +37,8 @@ public class MainActivity4 extends AppCompatActivity {
     ImageButton simpleButton1, simpleButton2, simpleButton3;
     VideoView simpleVideoView;
     MediaController mediaControls;
-    TextView name;
-    private NotificationManager notificationManager;
-    NotificationManagerCompat manager;
-
-    private static final int NOTIFY_ID = 101;
-    private static final String CHANNEL_ID = "CHANNEL_ID";
-    int id = 0;
-
+    TextView name, recomendation;
     PendingIntent pendingIntent;
-    AlarmManager alarmManager;
 
     @Override
     protected void onResume() {
@@ -59,40 +52,17 @@ public class MainActivity4 extends AppCompatActivity {
         setContentView(R.layout.activity_main4);
 
         name = findViewById(R.id.textView2);
+        recomendation = findViewById(R.id.recomendation);
         SharedPreferences prefs = this.getSharedPreferences("com.example.neww_project", Context.MODE_PRIVATE);
         videoPlay(prefs.getInt("key", 0));
 
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        //    NotificationChannel channel = new NotificationChannel("MyNotification", "MyNotification", NotificationManager.IMPORTANCE_DEFAULT);
-        //    NotificationManager manager = getSystemService(NotificationManager.class);
-        //    manager.createNotificationChannel(channel);
-        //}
-        //уведомления
-        //NotificationCompat.Builder builder =
-        //        new NotificationCompat.Builder(MainActivity4.this, "MyNotification")
-        //                .setSmallIcon(android.R.drawable.ic_dialog_email)
-        //                .setContentTitle("Title change").setContentText("Notification text change");
-
-        //NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity4.this);
-        //if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-        //    return;
-        //}
-        //managerCompat.notify(1, builder.build());
-
-        //Calendar notifyTime = Calendar.getInstance();
-        //notifyTime.set(Calendar.HOUR_OF_DAY, 6);
-        //notifyTime.set(Calendar.MINUTE, 15);
-        //notifyTime.set(Calendar.SECOND, 0);
-        //Intent intent = new Intent(this, NotificationPublisher.class);
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, notifyTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
+        Intent alarmIntent = new Intent(MainActivity4.this, MyAlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity4.this, 0, alarmIntent, 0);
+        start();
 
         simpleButton1 = (ImageButton) findViewById(R.id.button1);//get id of button 1
         simpleButton2 = (ImageButton) findViewById(R.id.button2);//get id of button 1
         simpleButton3 = (ImageButton) findViewById(R.id.button3);//get id of button 1
-
         simpleButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +83,6 @@ public class MainActivity4 extends AppCompatActivity {
         });
     }
 
-
     public void FullScreencall() {
         if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
             View v = this.getWindow().getDecorView();
@@ -125,7 +94,6 @@ public class MainActivity4 extends AppCompatActivity {
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
-
     void videoPlay(int advice) {
         simpleVideoView = (VideoView) findViewById(R.id.simpleVideoView);
 
@@ -137,12 +105,20 @@ public class MainActivity4 extends AppCompatActivity {
         simpleVideoView.setMediaController(mediaControls);
 
         if (advice == 1) {
-            simpleVideoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video1));
+            simpleVideoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.breketi));
             name.setText("Уход за полостью рта");
+            recomendation.setText("Соблюдайте режим ношения элайнеров. Помните, снимать элайнеры можно только на время еды или перед чисткой зубов. Все остальное время они должны быть надеты на зубы. Ортодонты советуют носить каппы минимум по 22 часа в сутки.\n" +
+                    "Перед тем, как надеть элайнеры, обязательно хорошо почистите зубы. При этом неважно, какой зубной щеткой вы будете это делать. Подойдет и та, которой вы пользовались до начала лечения. Использование зубной нити приветствуется, а вот ополаскиватель для рта нужно выбирать с осторожностью — в его составе не должно быть компонентов, которые могут пересушить слизистую.\n" +
+                    "Используйте зубную пасту, которая подходит для вашей эмали. Так как зубы приходится чистить часто, лучше выбирать мягкую пасту без абразивных частиц и эффекта отбеливания. Ею же можно чистить и элайнеры. Есть также специальное средство в виде таблеток для очистки ортодонтических конструкций. Используют его так: растворяют таблетку в теплой воде и на 3–5 минут опускают элайнеры в раствор.\n" +
+                    "Если у вас чувствительные десны, лучше использовать ирригатор. Ирригатор эффективно очищает все труднодоступные места, при этом не травмирует.\n" +
+                    "Элайнеры нужно снимать перед каждым приемом пищи или напитков. Пока вы будете есть, каппы нужно положить в специальный контейнер, чтобы предотвратить их поломку и не выбросить случайно вместе с использованной салфеткой. Воду в контейнер наливать не нужно.\n" +
+                    "Перед тем как надеть каппы, обязательно нужно их почистить. Сделать это можно с помощью зубной щетки без пасты или просто промыть под струей воды. Ни в коем случае не мойте их слишком горячей водой — так вы повредите полимер, из которого изготовлены элайнеры, и они потеряют свою форму.\n" +
+                    "Пациентам лучше воздержаться от курения, потому что элайнеры могут покрыться пленкой из-за осевших табачных смол. Они потемнеют, их будет труднее очистить.");
 
         } else if (advice == 2) {
             simpleVideoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video1));
             name.setText("Уход за элайнером");
+            recomendation.setText("Во время еды каппы нужно снимать. Также с элайнерами во рту нельзя пить чай, кофе и любые другие горячие напитки. Под воздействием высокой температуры материал каппы деформируется, форма ее нарушается и полноценного лечебного действия уже не происходит. Не снимая каппы, можно пить только обычную воду без добавок, комнатной температуры. Пациент носит каппы практически целые сутки, снимая только во время еды и чистки зубов. Следует отказаться от вредной привычки курения или снимать элайнеры перед курением. Это связано и с деформацией материала горячим дымом, и с тем, что если курить сигареты с элайнерами в полости рта, на них очень скоро появится пленка темного налета, снять который будет затруднительно. Нужно уделять гигиене полости рта в период лечения повышенное внимание. Это поможет предотвратить появление заболеваний зубов и слизистой. Так как очень важно, чтобы за время лечения зубы не только стали ровными, но еще и остались здоровыми.");
         } else if (advice == 3) {
             simpleVideoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video1));
             name.setText("Уход за трейнером");
@@ -175,5 +151,37 @@ public class MainActivity4 extends AppCompatActivity {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
     }
+    public void start() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 3);
+        calendar.set(Calendar.MINUTE, 1);
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int interval = 1000000;
+
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pendingIntent);
+    }
+
+    public void notification (View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("MyNotification", "MyNotification", NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationManager manager = getSystemService(NotificationManager.class);
+                manager.createNotificationChannel(channel);
+            }
+            //уведомления
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(this, "MyNotification")
+                            .setSmallIcon(android.R.drawable.ic_dialog_email)
+                            .setContentTitle("Title change").setContentText("Notification text change");
+
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            managerCompat.notify(1, builder.build());
+    }
+
 }
+
 

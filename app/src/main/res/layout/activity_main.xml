@@ -145,7 +145,7 @@
                     android:id="@+id/numberYears"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Дней"
+                    android:text="День"
                     android:textSize="30dp"></TextView>
                 </LinearLayout>
             </LinearLayout>
@@ -221,12 +221,14 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:layout_weight="20">
                 <LinearLayout
                 android:id="@+id/var1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"><LinearLayout
+                android:orientation="vertical"
+                    android:visibility="invisible"><LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -296,11 +298,17 @@
                             android:background="@drawable/first_text_layout"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout></LinearLayout>
+                
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
                 <LinearLayout
                     android:id="@+id/var2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"><LinearLayout
+                    android:orientation="vertical"
+                    android:visibility="visible">
+                    <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
@@ -309,8 +317,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="5"
-                        android:text="Продолжительность
-                        активации (в днях)"></TextView>
+                        android:text="Продолжительность (в днях)"></TextView>
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="wrap_content"
@@ -327,6 +334,7 @@
 
                 </LinearLayout>
 
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -336,45 +344,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="5"
-                            android:text="Время активации"></TextView>
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:layout_marginRight="5dp">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/tw5"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/first_text_layout"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/tw6"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/first_text_layout"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="5"
-                            android:text="Периодичность (каждые ... дня)"></TextView>
+                            android:text="Периодичность"></TextView>
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="wrap_content"
@@ -398,10 +368,9 @@
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="5"
-                            android:text="Количество оборотов
-расширяющего винта"></TextView>
+                            android:text="Количество оборотов расширяющего винта"></TextView>
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="wrap_content"
@@ -416,38 +385,45 @@
                                 android:background="@drawable/first_text_layout"
                                 android:inputType="time"/>
                         </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Время активации"></TextView>
+                        <TimePicker
+                            android:id="@+id/timePicker1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:timePickerMode="spinner"></TimePicker>
 
                     </LinearLayout>
                 </LinearLayout>
+                </ScrollView>
+                
+                
                 <LinearLayout
                     android:id="@+id/var3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"><LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:visibility="invisible">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:inputType="time"
-                        android:text="Примерное время пробуждения"></TextView>
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tw10"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/first_text_layout"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout></LinearLayout></FrameLayout>
+                        android:text="Примерное время пробуждения"></TextView>
+
+                    <TimePicker
+                        android:id="@+id/timePicker2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:timePickerMode="spinner">
+                    </TimePicker>
+       </LinearLayout></FrameLayout>
 
 
             <Button
