@@ -2,6 +2,7 @@ package com.example.neww_project;
 
 import static android.app.job.JobInfo.PRIORITY_HIGH;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -17,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -39,6 +41,10 @@ public class MainActivity4 extends AppCompatActivity {
     MediaController mediaControls;
     TextView name, recomendation;
     PendingIntent pendingIntent;
+    String CHANNEL_ID = "1";
+    String uv1 = "uv1";
+
+
 
     @Override
     protected void onResume() {
@@ -55,10 +61,19 @@ public class MainActivity4 extends AppCompatActivity {
         recomendation = findViewById(R.id.recomendation);
         SharedPreferences prefs = this.getSharedPreferences("com.example.neww_project", Context.MODE_PRIVATE);
         videoPlay(prefs.getInt("key", 0));
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NotificationManager.class);
 
-        Intent alarmIntent = new Intent(MainActivity4.this, MyAlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(MainActivity4.this, 0, alarmIntent, 0);
-        start();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "My channel",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("My channel description");
+            channel.enableLights(true);
+            notificationManager.createNotificationChannel(channel);
+        }
+        createNotificationChannel();
+        scheduleNotification(this, "fff", "fffd");
+
+        Toast.makeText(this, "Уведомление", Toast.LENGTH_LONG).show();
 
         simpleButton1 = (ImageButton) findViewById(R.id.button1);//get id of button 1
         simpleButton2 = (ImageButton) findViewById(R.id.button2);//get id of button 1
@@ -133,55 +148,23 @@ public class MainActivity4 extends AppCompatActivity {
         simpleVideoView.start();
     }
 
-    public static void setReminder(Context context, Class<?> cls, int hour, int min) {
-        Calendar calendar = Calendar.getInstance();
-        Calendar setcalendar = Calendar.getInstance();
-        setcalendar.set(Calendar.HOUR_OF_DAY, hour);
-        setcalendar.set(Calendar.MINUTE, min);
-        setcalendar.set(Calendar.SECOND, 0);
-        // cancel already scheduled reminders
-
-        if (setcalendar.before(calendar))
-            setcalendar.add(Calendar.DATE, 1);
-
-        // Enable a receiver
-        ComponentName receiver = new ComponentName(context, cls);
-        PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-    public void start() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 3);
-        calendar.set(Calendar.MINUTE, 1);
-
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 1000000;
-
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pendingIntent);
+    public static void scheduleNotification(Context context, String title, String text) {
+        Intent intent = new Intent(context, NotificationPublisher.class);
+        intent.putExtra("title", title);
+        intent.putExtra("text", text);
+        PendingIntent pending = PendingIntent.getBroadcast(context, 200, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        manager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 100000, 1000 * 60, pending);
     }
 
-    public void notification (View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("MyNotification", "MyNotification", NotificationManager.IMPORTANCE_DEFAULT);
-                NotificationManager manager = getSystemService(NotificationManager.class);
-                manager.createNotificationChannel(channel);
-            }
-            //уведомления
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(this, "MyNotification")
-                            .setSmallIcon(android.R.drawable.ic_dialog_email)
-                            .setContentTitle("Title change").setContentText("Notification text change");
-
-            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            managerCompat.notify(1, builder.build());
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createNotificationChannel() {
+        String name = "Daily Alerts";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(channel);
     }
-
 }
 
 

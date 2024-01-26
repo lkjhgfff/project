@@ -75,7 +75,7 @@ public class Choice extends AppCompatActivity {
                 //To edit shared preferences use editor as follows
                 editor.putInt("key",dev);
                 editor.commit();
-                startActivity(new Intent(Choice.this, MainActivity2.class));
+                startActivity(new Intent(Choice.this, NoteClass.class));
             }
         });
     }

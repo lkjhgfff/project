@@ -159,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent alarmIntent = new Intent(MainActivity.this, MyAlarmReceiver.class);
-                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE);
                 start(time_picker2.getHour(), time_picker2.getMinute());
                 choiceLayout.setVisibility(View.INVISIBLE);
 
